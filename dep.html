@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebDeploy by Ryo</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Clash+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#07070f;
+  --surf:#0f0f1a;
+  --surf2:#13131f;
+  --surf3:#1a1a2a;
+  --border:#1e1e32;
+  --border2:#27273d;
+  --accent:#6c47ff;
+  --accent2:#00e5ff;
+  --teal:#00c7b7;
+  --green:#00d68f;
+  --yellow:#ffb84d;
+  --red:#ff4d6d;
+  --text:#eeeeff;
+  --muted:#555575;
+  --muted2:#7777aa;
+  --mono:'Space Mono',monospace;
+  --sans:'Plus Jakarta Sans',sans-serif;
+  --display:'Plus Jakarta Sans',sans-serif;
+}
+
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column}
+
+/* ═══ HEADER ═══ */
+.header{
+  flex-shrink:0;
+  background:var(--surf);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  position:relative;
+  z-index:50;
+}
+
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  flex-shrink:0;
+}
+.brand-name{
+  font-family:var(--display);
+  font-size:18px;
+  font-weight:700;
+  background:linear-gradient(120deg,#a78bfa,var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  letter-spacing:-0.3px;
+}
+.brand-by{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--muted2);
+  letter-spacing:0.5px;
+}
+.brand-ryo{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--teal);
+  font-weight:700;
+}
+
+/* tabs */
+.mode-tabs{
+  display:flex;
+  background:var(--surf3);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:3px;
+  gap:2px;
+}
+.tab{
+  font-family:var(--mono);
+  font-size:11px;
+  padding:5px 14px;
+  border-radius:5px;
+  border:none;
+  background:transparent;
+  color:var(--muted2);
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+}
+.tab.active{
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-shrink:0;
+}
+
+.btn{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  padding:7px 14px;
+  border-radius:7px;
+  border:1px solid var(--border2);
+  background:transparent;
+  color:var(--muted2);
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+}
+.btn:hover{color:var(--text);border-color:var(--muted2)}
+
+.btn-run{
+  background:var(--green);
+  color:#000;
+  border-color:var(--green);
+}
+.btn-run:hover{background:#00f0a0;box-shadow:0 0 16px rgba(0,214,143,0.4)}
+
+.btn-deploy{
+  background:linear-gradient(135deg,var(--teal),#00a89a);
+  color:#000;
+  border:none;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.btn-deploy:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,199,183,0.35);color:#000}
+
+/* ═══ SHARE BAR ═══ */
+.share-bar{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  padding:6px 16px;
+  gap:8px;
+  background:var(--surf2);
+  border-bottom:1px solid var(--border);
+}
+.share-label{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:1px;
+  flex-shrink:0;
+}
+.share-input-wrap{
+  flex:1;
+  display:flex;
+  align-items:center;
+  background:var(--bg);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  overflow:hidden;
+  min-width:0;
+  transition:border-color 0.2s;
+}
+.share-input-wrap:focus-within{border-color:var(--accent)}
+.share-input{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-family:var(--mono);
+  font-size:11px;
+  color:#a78bfa;
+  padding:5px 10px;
+  min-width:0;
+  cursor:pointer;
+}
+.share-input::placeholder{color:var(--muted)}
+.btn-copy{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:6px 12px;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+  transition:background 0.15s;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.btn-copy:hover{background:#7c5aff}
+.btn-copy.ok{background:var(--green);color:#000}
+
+.btn-open-tab{
+  background:var(--surf3);
+  border:1px solid var(--border2);
+  color:var(--muted2);
+  padding:5px 10px;
+  border-radius:6px;
+  font-size:13px;
+  cursor:pointer;
+  transition:all 0.15s;
+  flex-shrink:0;
+}
+.btn-open-tab:hover{color:var(--text)}
+
+/* ═══ WORKSPACE ═══ */
+.workspace{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+  position:relative;
+}
+
+/* ── Editor Panel ── */
+.editor-panel{
+  width:50%;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  flex-shrink:0;
+}
+.panel-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 14px;
+  background:var(--surf2);
+  border-bottom:1px solid var(--border);
+  border-right:1px solid var(--border);
+  flex-shrink:0;
+}
+.panel-label{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--muted2);
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.status-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--muted);
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--muted);transition:all 0.3s}
+.dot.live{background:var(--green);box-shadow:0 0 8px rgba(0,214,143,0.5);animation:pulse 1.5s infinite}
+.dot.typing{background:var(--yellow)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* EDITOR area */
+.editor-area{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  border-right:1px solid var(--border);
+}
+textarea{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  background:var(--bg);
+  color:#b8c8e8;
+  border:none;
+  outline:none;
+  resize:none;
+  font-family:var(--mono);
+  font-size:12.5px;
+  line-height:1.85;
+  padding:18px 20px;
+  tab-size:2;
+}
+textarea::placeholder{color:#1c1c2e}
+
+/* UPLOAD DROP ZONE */
+.upload-zone{
+  display:none;
+  flex:1;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  border-right:1px solid var(--border);
+  background:var(--bg);
+  cursor:pointer;
+  transition:background 0.2s;
+  position:relative;
+  padding:40px 24px;
+  text-align:center;
+}
+.upload-zone.active-mode{display:flex}
+.upload-zone.drag-over{background:rgba(108,71,255,0.05)}
+
+.upload-zone-border{
+  position:absolute;
+  inset:20px;
+  border:2px dashed var(--border2);
+  border-radius:16px;
+  pointer-events:none;
+  transition:border-color 0.2s;
+}
+.upload-zone.drag-over .upload-zone-border{border-color:var(--accent)}
+
+.upload-icon{font-size:48px;opacity:0.4}
+.upload-title{font-size:18px;font-weight:700;color:var(--text)}
+.upload-sub{font-size:13px;color:var(--muted2);font-family:var(--mono);line-height:1.7}
+.upload-or{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--muted);
+  position:relative;
+}
+.btn-browse{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:10px 24px;
+  border-radius:8px;
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.15s;
+}
+.btn-browse:hover{background:#7c5aff;transform:translateY(-1px)}
+
+/* Uploaded file info */
+.file-loaded{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex:1;
+  border-right:1px solid var(--border);
+  background:var(--bg);
+  padding:32px 24px;
+  text-align:center;
+}
+.file-loaded.show{display:flex}
+
+.file-card{
+  background:var(--surf2);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:20px 28px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  max-width:320px;
+  width:100%;
+}
+.file-icon{font-size:32px}
+.file-meta strong{display:block;font-size:14px;margin-bottom:4px;word-break:break-all}
+.file-meta span{font-family:var(--mono);font-size:11px;color:var(--teal)}
+.file-actions{display:flex;gap:8px;margin-top:8px}
+.btn-sm{
+  font-family:var(--mono);font-size:10px;padding:5px 12px;
+  border-radius:5px;border:1px solid var(--border2);
+  background:transparent;color:var(--muted2);cursor:pointer;transition:all 0.15s;
+}
+.btn-sm:hover{color:var(--text);border-color:var(--muted2)}
+.btn-sm.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-sm.primary:hover{background:#7c5aff}
+
+/* ── Divider ── */
+.divider{
+  width:4px;background:var(--border);
+  cursor:col-resize;flex-shrink:0;transition:background 0.2s;
+}
+.divider:hover,.divider.drag{background:var(--accent)}
+
+/* ── Preview Panel ── */
+.preview-panel{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.browser-bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 14px;
+  background:var(--surf2);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.tdots{display:flex;gap:5px}
+.td{width:9px;height:9px;border-radius:50%}
+.td1{background:#ff5f57}.td2{background:#febc2e}.td3{background:#28c840}
+.addr-bar{
+  flex:1;background:var(--bg);border:1px solid var(--border2);
+  border-radius:5px;padding:4px 10px;
+  font-family:var(--mono);font-size:10px;color:var(--muted2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.preview-area{flex:1;position:relative;overflow:hidden}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:none;background:#fff}
+.empty-preview{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;background:#08080e;
+}
+.empty-icon{font-size:40px;opacity:0.15}
+.empty-text{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;line-height:2}
+
+/* ═══ STATUS BAR ═══ */
+.statusbar{
+  flex-shrink:0;height:22px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 14px;
+  background:var(--accent);
+  font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.75);
+  transition:background 0.3s;
+}
+.statusbar.live{background:var(--green);color:#000}
+
+/* ═══ MODAL ═══ */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);
+  z-index:200;align-items:center;justify-content:center;padding:16px;
+}
+.modal-bg.open{display:flex}
+.modal{
+  background:#0c0c1a;border:1px solid var(--border2);
+  border-radius:16px;width:480px;max-width:100%;
+  overflow:hidden;animation:mIn 0.25s ease;max-height:90vh;overflow-y:auto;
+}
+@keyframes mIn{from{opacity:0;transform:scale(0.93) translateY(12px)}to{opacity:1;transform:none}}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px 14px;border-bottom:1px solid var(--border);sticky;top:0;
+  background:#0c0c1a;
+}
+.modal-head h2{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.modal-x{background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:color 0.15s}
+.modal-x:hover{color:var(--text)}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+
+/* big deploy btn */
+.big-btn{
+  width:100%;display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,var(--teal) 0%,#009e94 100%);
+  border:none;border-radius:12px;padding:16px 20px;
+  cursor:pointer;text-align:left;transition:all 0.2s;
+}
+.big-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,199,183,0.3)}
+.big-btn-icon{font-size:28px;flex-shrink:0}
+.big-btn-text strong{display:block;font-size:15px;font-weight:700;color:#000;margin-bottom:2px}
+.big-btn-text span{font-size:11px;color:rgba(0,0,0,0.55);font-family:var(--mono)}
+.big-btn-arr{font-size:20px;color:rgba(0,0,0,0.4);margin-left:auto;flex-shrink:0}
+.big-btn.done{background:linear-gradient(135deg,var(--green),#00b07a)}
+
+/* steps list */
+.deploy-steps{display:flex;flex-direction:column;gap:2px}
+.ds{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 12px;background:var(--bg);
+  border:1px solid var(--border2);border-radius:8px;
+}
+.ds-num{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:var(--surf3);color:var(--muted2);
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.ds-num.ok{background:rgba(0,214,143,0.15);color:var(--green)}
+.ds-num.go{background:var(--accent);color:#fff;animation:pulse 1s infinite}
+.ds-body strong{display:block;font-size:12px;font-weight:600;margin-bottom:2px}
+.ds-body span{font-size:11px;color:var(--muted2);font-family:var(--mono)}
+.ds-body code{color:#a78bfa;font-family:var(--mono);font-size:11px}
+
+.tip-box{
+  background:rgba(255,184,77,0.07);border:1px solid rgba(255,184,77,0.2);
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:rgba(255,184,77,0.85);line-height:1.6;
+}
+
+/* ═══ TOAST ═══ */
+.toast{
+  position:fixed;bottom:36px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:#14142a;border:1px solid var(--accent);
+  color:#a78bfa;font-family:var(--mono);font-size:11px;
+  padding:9px 18px;border-radius:20px;
+  opacity:0;transition:all 0.2s;pointer-events:none;z-index:999;
+  white-space:nowrap;max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* hidden file input */
+#fileInput{display:none}
+
+/* ═══ RESPONSIVE MOBILE ═══ */
+@media(max-width:700px){
+  .header{height:auto;padding:10px 12px;flex-wrap:wrap;gap:8px}
+  .brand-name{font-size:16px}
+  .mode-tabs .tab{padding:5px 10px;font-size:10px}
+  .header-right{width:100%;justify-content:flex-end}
+  .btn{padding:6px 10px;font-size:10px}
+
+  .share-bar{padding:6px 10px;gap:6px}
+  .share-label{display:none}
+
+  /* On mobile: stack vertically, show only active panel */
+  .workspace{flex-direction:column}
+  .editor-panel{width:100% !important;height:50%}
+  .divider{width:100%;height:4px;cursor:row-resize}
+  .preview-panel{height:50%}
+
+  textarea{font-size:12px;padding:12px 14px}
+
+  .statusbar{font-size:9px}
+  .btn-deploy .deploy-label{display:none}
+
+  .modal{border-radius:12px}
+  .big-btn{padding:12px 14px}
+  .big-btn-text strong{font-size:13px}
+}
+
+@media(max-width:400px){
+  .header-right .btn:not(.btn-deploy){display:none}
+  .mode-tabs{width:100%}
+  .tab{flex:1;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="brand">
+    <span class="brand-name">WebDeploy</span>
+    <span class="brand-by">by</span>
+    <span class="brand-ryo">Ryo</span>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="tab active" id="tabWrite" onclick="setMode('write')">✏️ Tulis HTML</button>
+    <button class="tab" id="tabUpload" onclick="setMode('upload')">📁 Upload File</button>
+  </div>
+
+  <div class="header-right">
+    <button class="btn" onclick="loadExample()" id="btnExample">Contoh</button>
+    <button class="btn" onclick="clearAll()">Clear</button>
+    <button class="btn btn-run" onclick="runPreview()">▶ Run</button>
+    <button class="btn btn-deploy" onclick="showDeploy()">
+      <span>🚀</span><span class="deploy-label">Deploy</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ SHARE BAR ═══ -->
+<div class="share-bar">
+  <span class="share-label">🔗 LINK</span>
+  <div class="share-input-wrap">
+    <input class="share-input" id="shareUrl" type="text" readonly placeholder="Tulis/upload HTML dulu buat generate link..." onclick="this.select()">
+    <button class="btn-copy" id="copyBtn" onclick="copyUrl()">COPY</button>
+  </div>
+  <button class="btn-open-tab" onclick="openNew()" title="Buka di tab baru">⤢</button>
+</div>
+
+<!-- ═══ WORKSPACE ═══ -->
+<div class="workspace" id="workspace">
+
+  <!-- EDITOR PANEL -->
+  <div class="editor-panel" id="editorPanel">
+    <div class="panel-top">
+      <span class="panel-label" id="panelLabel">📄 HTML Editor</span>
+      <div class="status-pill">
+        <div class="dot" id="dot"></div>
+        <span id="dotText">siap</span>
+      </div>
+    </div>
+
+    <!-- Write mode: textarea -->
+    <div class="editor-area" id="editorArea">
+      <textarea id="editor" spellcheck="false" placeholder="<!-- Tulis HTML kamu di sini...
+
+Ctrl+Enter → Run langsung
+Kode otomatis jadi shareable link! ✨ -->"></textarea>
+    </div>
+
+    <!-- Upload mode: drop zone -->
+    <div class="upload-zone" id="uploadZone"
+         onclick="triggerUpload()"
+         ondragover="handleDragOver(event)"
+         ondragleave="handleDragLeave(event)"
+         ondrop="handleDrop(event)">
+      <div class="upload-zone-border"></div>
+      <div class="upload-icon">📂</div>
+      <div class="upload-title">Drop file HTML di sini</div>
+      <div class="upload-sub">Mendukung file .html & .htm<br>Ukuran maks ~1MB</div>
+      <div class="upload-or">— atau —</div>
+      <button class="btn-browse" onclick="event.stopPropagation();triggerUpload()">📁 Pilih File</button>
+    </div>
+
+    <!-- File loaded state -->
+    <div class="file-loaded" id="fileLoaded">
+      <div class="file-card">
+        <div class="file-icon">📄</div>
+        <div class="file-meta">
+          <strong id="loadedName">index.html</strong>
+          <span id="loadedSize">0 KB</span>
+          <div class="file-actions">
+            <button class="btn-sm" onclick="setMode('upload')">Ganti File</button>
+            <button class="btn-sm primary" onclick="runPreview()">▶ Preview</button>
+          </div>
+        </div>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center">
+        File berhasil dimuat! Klik Preview atau<br>langsung Deploy ke Netlify.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider" id="divider"></div>
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel" id="previewPanel">
+    <div class="browser-bar">
+      <div class="tdots">
+        <div class="td td1"></div>
+        <div class="td td2"></div>
+        <div class="td td3"></div>
+      </div>
+      <div class="addr-bar" id="addrBar">preview.local</div>
+      <button class="btn-open-tab" onclick="openNew()" title="Tab baru">⤢</button>
+    </div>
+    <div class="preview-area">
+      <div class="empty-preview" id="emptyPreview">
+        <div class="empty-icon">🌐</div>
+        <div class="empty-text">Preview muncul di sini<br>setelah kamu tulis / upload HTML</div>
+      </div>
+      <iframe id="preview" style="display:none"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ STATUS BAR ═══ -->
+<div class="statusbar" id="statusbar">
+  <span id="sbLeft">WebDeploy by Ryo — Tulis HTML, share via URL, deploy 1 klik</span>
+  <span id="sbRight">0 chars</span>
+</div>
+
+<!-- ═══ DEPLOY MODAL ═══ -->
+<div class="modal-bg" id="deployModal" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>🚀 Deploy ke Netlify</h2>
+      <button class="modal-x" onclick="hideDeploy()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- File info -->
+      <div style="background:var(--surf3);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:24px">📄</span>
+        <div>
+          <div style="font-weight:600;font-size:13px" id="deployFileName">index.html</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--teal)" id="deployFileSize">menghitung...</div>
+        </div>
+      </div>
+
+      <!-- Big button -->
+      <button class="big-btn" id="bigDeployBtn" onclick="deployNow()">
+        <span class="big-btn-icon">⚡</span>
+        <span class="big-btn-text">
+          <strong>Deploy Sekarang — 1 Klik</strong>
+          <span>File terdownload + Netlify Drop terbuka otomatis</span>
+        </span>
+        <span class="big-btn-arr">→</span>
+      </button>
+
+      <!-- Steps -->
+      <div class="deploy-steps">
+        <div class="ds">
+          <div class="ds-num ok" id="ds1">⬇</div>
+          <div class="ds-body">
+            <strong>index.html otomatis terdownload</strong>
+            <span>Langsung ke folder Downloads kamu</span>
+          </div>
+        </div>
+        <div class="ds">
+          <div class="ds-num" id="ds2">2</div>
+          <div class="ds-body">
+            <strong>Netlify Drop terbuka di tab baru</strong>
+            <span>app.netlify.com/drop</span>
+          </div>
+        </div>
+        <div class="ds">
+          <div class="ds-num" id="ds3">3</div>
+          <div class="ds-body">
+            <strong>Drag & drop <code>index.html</code> ke sana</strong>
+            <span>Tarik dari Downloads → kotak Netlify</span>
+          </div>
+        </div>
+        <div class="ds">
+          <div class="ds-num" id="ds4">🎉</div>
+          <div class="ds-body">
+            <strong>Website live selamanya!</strong>
+            <span>Dapat link <code>nama.netlify.app</code> — gratis, no login!</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        💡 <b>Netlify Drop gratis & tanpa akun.</b> Website lo bakal hidup permanen. Kalau mau update nanti, tinggal drag file baru ke link yang sama setelah daftar gratis.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" id="fileInput" accept=".html,.htm" onchange="handleFileSelect(event)">
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════
+// STATE
+// ═══════════════════════════════
+let mode = 'write'; // 'write' | 'upload'
+let currentHtml = '';
+let currentUrl = '';
+let uploadedFileName = '';
+let debounce;
+let isMobile = window.innerWidth <= 700;
+
+// ═══════════════════════════════
+// ELEMENTS
+// ═══════════════════════════════
+const editor = document.getElementById('editor');
+const preview = document.getElementById('preview');
+const emptyPreview = document.getElementById('emptyPreview');
+const shareUrlInput = document.getElementById('shareUrl');
+const copyBtn = document.getElementById('copyBtn');
+const addrBar = document.getElementById('addrBar');
+const statusbar = document.getElementById('statusbar');
+const sbLeft = document.getElementById('sbLeft');
+const sbRight = document.getElementById('sbRight');
+const dot = document.getElementById('dot');
+const dotText = document.getElementById('dotText');
+const uploadZone = document.getElementById('uploadZone');
+const editorArea = document.getElementById('editorArea');
+const fileLoaded = document.getElementById('fileLoaded');
+const panelLabel = document.getElementById('panelLabel');
+
+// ═══════════════════════════════
+// MODE SWITCHING
+// ═══════════════════════════════
+function setMode(m) {
+  mode = m;
+  document.getElementById('tabWrite').classList.toggle('active', m === 'write');
+  document.getElementById('tabUpload').classList.toggle('active', m === 'upload');
+
+  if (m === 'write') {
+    editorArea.style.display = 'block';
+    uploadZone.classList.remove('active-mode');
+    fileLoaded.classList.remove('show');
+    panelLabel.textContent = '📄 HTML Editor';
+    document.getElementById('btnExample').style.display = '';
+  } else {
+    editorArea.style.display = 'none';
+    fileLoaded.classList.remove('show');
+    uploadZone.classList.add('active-mode');
+    panelLabel.textContent = '📁 Upload File HTML';
+    document.getElementById('btnExample').style.display = 'none';
+  }
+}
+
+// ═══════════════════════════════
+// ENCODE / DECODE
+// ═══════════════════════════════
+function encodeHTML(html) {
+  try { return btoa(unescape(encodeURIComponent(html))); }
+  catch(e) { return btoa(html); }
+}
+function decodeHTML(enc) {
+  try { return decodeURIComponent(escape(atob(enc))); }
+  catch(e) { try { return atob(enc); } catch(e2) { return ''; } }
+}
+function genShareUrl(html) {
+  const base = location.href.split('#')[0].split('?')[0];
+  return base + '#v1:' + encodeHTML(html);
+}
+
+// ═══════════════════════════════
+// PREVIEW & SHARE URL
+// ═══════════════════════════════
+function runPreview(html) {
+  const h = html || (mode === 'write' ? editor.value.trim() : currentHtml);
+  if (!h) {
+    emptyPreview.style.display = 'flex';
+    preview.style.display = 'none';
+    shareUrlInput.value = '';
+    shareUrlInput.placeholder = 'Tulis/upload HTML dulu buat generate link...';
+    addrBar.textContent = 'preview.local';
+    currentUrl = '';
+    setStatus('siap', '');
+    statusbar.className = 'statusbar';
+    sbLeft.textContent = 'WebDeploy by Ryo — Tulis HTML, share via URL, deploy 1 klik';
+    return;
+  }
+
+  currentHtml = h;
+
+  // Show preview
+  emptyPreview.style.display = 'none';
+  preview.style.display = 'block';
+  const blob = new Blob([h], {type:'text/html'});
+  preview.src = URL.createObjectURL(blob);
+
+  // Share URL
+  const url = genShareUrl(h);
+  currentUrl = url;
+  shareUrlInput.value = url;
+  addrBar.textContent = url.length > 55 ? url.slice(0,52)+'...' : url;
+  history.replaceState(null,'', url);
+
+  setStatus('live', 'live');
+  statusbar.className = 'statusbar live';
+  sbLeft.textContent = '✓ Live — link siap dishare (' + url.length.toLocaleString() + ' chars)';
+  copyBtn.classList.remove('ok');
+  copyBtn.textContent = 'COPY';
+}
+
+function setStatus(text, cls) {
+  dotText.textContent = text;
+  dot.className = 'dot' + (cls ? ' '+cls : '');
+}
+
+function updateStats() {
+  const v = editor.value;
+  sbRight.textContent = v.length.toLocaleString() + ' chars · ' + v.split('\n').length + ' lines';
+}
+
+// ═══════════════════════════════
+// EDITOR EVENTS
+// ═══════════════════════════════
+editor.addEventListener('input', () => {
+  updateStats();
+  setStatus('mengetik...', 'typing');
+  clearTimeout(debounce);
+  debounce = setTimeout(() => runPreview(), 900);
+});
+
+editor.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = editor.selectionStart, end = editor.selectionEnd;
+    editor.value = editor.value.slice(0,s) + '  ' + editor.value.slice(end);
+    editor.selectionStart = editor.selectionEnd = s+2;
+  }
+  if ((e.ctrlKey||e.metaKey) && e.key==='Enter') { e.preventDefault(); runPreview(); }
+});
+
+// ═══════════════════════════════
+// FILE UPLOAD
+// ═══════════════════════════════
+function triggerUpload() {
+  document.getElementById('fileInput').click();
+}
+
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) loadFile(file);
+  e.target.value = '';
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.add('drag-over');
+}
+function handleDragLeave(e) {
+  document.getElementById('uploadZone').classList.remove('drag-over');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) loadFile(file);
+}
+
+function loadFile(file) {
+  if (!file.name.match(/\.(html?|htm)$/i)) {
+    showToast('Hanya file .html atau .htm yang didukung!');
+    return;
+  }
+  const kb = (file.size/1024).toFixed(1);
+  uploadedFileName = file.name;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const html = e.target.result;
+    currentHtml = html;
+
+    // Show file loaded state
+    uploadZone.classList.remove('active-mode');
+    fileLoaded.classList.add('show');
+    document.getElementById('loadedName').textContent = file.name;
+    document.getElementById('loadedSize').textContent = kb + ' KB · siap deploy';
+
+    showToast('✓ ' + file.name + ' berhasil dimuat!');
+    runPreview(html);
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════
+// COPY / OPEN
+// ═══════════════════════════════
+function copyUrl() {
+  if (!currentUrl) return showToast('Generate preview dulu!');
+  navigator.clipboard.writeText(currentUrl).then(() => {
+    copyBtn.textContent = '✓ OK!';
+    copyBtn.classList.add('ok');
+    showToast('Link tersalin — share ke siapapun! 🔗');
+    setTimeout(() => { copyBtn.textContent='COPY'; copyBtn.classList.remove('ok'); }, 3000);
+  });
+}
+function openNew() {
+  if (!currentUrl) return showToast('Generate preview dulu!');
+  window.open(currentUrl, '_blank');
+}
+
+// ═══════════════════════════════
+// CLEAR / EXAMPLE
+// ═══════════════════════════════
+function clearAll() {
+  if ((editor.value || currentHtml) && !confirm('Clear semua?')) return;
+  editor.value = '';
+  currentHtml = '';
+  currentUrl = '';
+  uploadedFileName = '';
+  shareUrlInput.value = '';
+  history.replaceState(null,'', location.pathname);
+  emptyPreview.style.display='flex';
+  preview.style.display='none';
+  fileLoaded.classList.remove('show');
+  if (mode==='upload') uploadZone.classList.add('active-mode');
+  updateStats();
+  setStatus('siap','');
+  statusbar.className='statusbar';
+  sbLeft.textContent='WebDeploy by Ryo — Tulis HTML, share via URL, deploy 1 klik';
+}
+
+function loadExample() {
+  setMode('write');
+  editor.value = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Keren by Ryo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;700;900&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Plus Jakarta Sans',sans-serif;
+      background:#07070f;color:#eeeeff;
+      min-height:100vh;display:flex;
+      flex-direction:column;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .glow{
+      position:fixed;inset:0;pointer-events:none;
+      background:radial-gradient(ellipse at 30% 50%,rgba(108,71,255,.15) 0,transparent 60%),
+                 radial-gradient(ellipse at 75% 60%,rgba(0,229,255,.1) 0,transparent 55%);
+    }
+    h1{
+      font-size:clamp(40px,10vw,88px);font-weight:900;text-align:center;
+      background:linear-gradient(135deg,#a78bfa,#00e5ff);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      position:relative;animation:up .7s ease both;
+    }
+    p{font-weight:300;color:rgba(255,255,255,.45);margin-top:12px;text-align:center;position:relative;animation:up .7s .15s ease both}
+    @keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    button{
+      margin-top:28px;position:relative;
+      background:linear-gradient(135deg,#6c47ff,#00e5ff);color:#fff;
+      border:none;padding:14px 36px;border-radius:50px;
+      font-size:16px;font-weight:700;cursor:pointer;
+      animation:up .7s .3s ease both;transition:transform .2s,box-shadow .2s;
+    }
+    button:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(108,71,255,.5)}
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <h1>Halo Dunia! 👋</h1>
+  <p>Dibuat dengan WebDeploy by Ryo — share & deploy langsung!</p>
+  <button onclick="this.textContent='🎉 Mantap!'">Klik Aku</button>
+</body>
+</html>`;
+  runPreview();
+  updateStats();
+  showToast('Contoh dimuat!');
+}
+
+// ═══════════════════════════════
+// LOAD FROM URL
+// ═══════════════════════════════
+function loadFromUrl() {
+  const hash = location.hash;
+  if (!hash || hash.length < 5) return;
+  try {
+    const data = hash.slice(1);
+    const html = data.startsWith('v1:') ? decodeHTML(data.slice(3)) : decodeHTML(data);
+    if (html) {
+      editor.value = html;
+      runPreview(html);
+      updateStats();
+    }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════
+// DEPLOY MODAL
+// ═══════════════════════════════
+function showDeploy() {
+  const h = mode === 'write' ? editor.value.trim() : currentHtml;
+  if (!h) { showToast('Tulis atau upload HTML dulu!'); return; }
+  currentHtml = h;
+  const kb = (new Blob([h]).size/1024).toFixed(1);
+  document.getElementById('deployFileName').textContent = uploadedFileName || 'index.html';
+  document.getElementById('deployFileSize').textContent = kb + ' KB · siap deploy';
+  // reset steps
+  ['ds1','ds2','ds3','ds4'].forEach(id => {
+    const el = document.getElementById(id);
+    el.className = 'ds-num';
+    el.textContent = id.slice(2);
+  });
+  document.getElementById('ds1').textContent = '⬇';
+  document.getElementById('ds4').textContent = '🎉';
+  const bb = document.getElementById('bigDeployBtn');
+  bb.className = 'big-btn';
+  bb.onclick = deployNow;
+  bb.innerHTML = `<span class="big-btn-icon">⚡</span><span class="big-btn-text"><strong>Deploy Sekarang — 1 Klik</strong><span>File terdownload + Netlify Drop terbuka otomatis</span></span><span class="big-btn-arr">→</span>`;
+  document.getElementById('deployModal').classList.add('open');
+}
+
+function hideDeploy() {
+  document.getElementById('deployModal').classList.remove('open');
+}
+function bgClose(e) {
+  if (e.target === document.getElementById('deployModal')) hideDeploy();
+}
+
+function deployNow() {
+  const h = currentHtml;
+  if (!h) return showToast('Tidak ada HTML untuk deploy!');
+
+  // Download file
+  const blob = new Blob([h], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = uploadedFileName || 'index.html';
+  a.click();
+
+  // Animate steps
+  const step = (id, cls, txt, delay) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      el.className = 'ds-num ' + cls;
+      if (txt) el.textContent = txt;
+    }, delay);
+  };
+
+  step('ds1','ok','✓',100);
+  step('ds2','go','2',300);
+  setTimeout(() => window.open('https://app.netlify.com/drop','_blank'), 400);
+  step('ds2','ok','✓',1300);
+  step('ds3','go','3',1400);
+  step('ds3','ok','✓',2200);
+  step('ds4','ok','🎉',2300);
+
+  // Update big button
+  setTimeout(() => {
+    const bb = document.getElementById('bigDeployBtn');
+    bb.className = 'big-btn done';
+    bb.innerHTML = `<span class="big-btn-icon">✅</span><span class="big-btn-text"><strong>File terdownload! Netlify terbuka!</strong><span>Drag index.html ke tab Netlify Drop → LIVE!</span></span>`;
+  }, 2400);
+
+  showToast('⬇ Terdownload! Drag ke Netlify Drop sekarang 🚀');
+}
+
+// ═══════════════════════════════
+// TOAST
+// ═══════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════════════════════════
+// DIVIDER DRAG
+// ═══════════════════════════════
+const divider = document.getElementById('divider');
+const editorPanel = document.getElementById('editorPanel');
+const workspace = document.getElementById('workspace');
+let dragging = false;
+
+divider.addEventListener('mousedown', () => {
+  dragging = true;
+  divider.classList.add('drag');
+  document.body.style.userSelect = 'none';
+  document.body.style.cursor = isMobile ? 'row-resize' : 'col-resize';
+});
+document.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const r = workspace.getBoundingClientRect();
+  if (isMobile) {
+    const pct = Math.min(Math.max(((e.clientY - r.top) / r.height) * 100, 20), 80);
+    editorPanel.style.height = pct + '%';
+    editorPanel.style.width = '100%';
+  } else {
+    const pct = Math.min(Math.max(((e.clientX - r.left) / r.width) * 100, 20), 80);
+    editorPanel.style.width = pct + '%';
+  }
+});
+document.addEventListener('mouseup', () => {
+  if (!dragging) return;
+  dragging = false;
+  divider.classList.remove('drag');
+  document.body.style.userSelect = '';
+  document.body.style.cursor = '';
+});
+
+// Touch support for divider
+divider.addEventListener('touchstart', e => {
+  dragging = true;
+  divider.classList.add('drag');
+}, {passive:true});
+document.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  const touch = e.touches[0];
+  const r = workspace.getBoundingClientRect();
+  if (isMobile) {
+    const pct = Math.min(Math.max(((touch.clientY - r.top) / r.height) * 100, 20), 80);
+    editorPanel.style.height = pct + '%';
+  } else {
+    const pct = Math.min(Math.max(((touch.clientX - r.left) / r.width) * 100, 20), 80);
+    editorPanel.style.width = pct + '%';
+  }
+}, {passive:true});
+document.addEventListener('touchend', () => {
+  dragging = false;
+  divider.classList.remove('drag');
+});
+
+window.addEventListener('resize', () => {
+  isMobile = window.innerWidth <= 700;
+});
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+loadFromUrl();
+updateStats();
+</script>
+</body>
+</html>
